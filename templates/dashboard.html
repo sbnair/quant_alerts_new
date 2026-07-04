@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bar">
+  <div class="tabs">
+    {% for m in markets %}
+      <a href="/?market={{ m }}" class="{{ 'active' if m == market }}">
+        {{ {'INDIA':'🇮🇳 India F&O','CRYPTO':'🪙 Crypto','US':'🇺🇸 US'}[m] }}</a>
+    {% endfor %}
+  </div>
+  <button id="scanBtn" {{ 'disabled' if scanning }}>
+    {{ 'Scanning…' if scanning else '▶ Scan Now' }}</button>
+  {% if run %}
+    <span class="muted">Last scan: {{ run.scan_kind }} ·
+      {{ run.finished_at.strftime('%Y-%m-%d %H:%M UTC') if run.finished_at }} ·
+      {{ run.n_symbols }} symbols</span>
+  {% else %}
+    <span class="muted">No scan yet for {{ market }} — hit Scan Now.</span>
+  {% endif %}
+  <span style="flex:1"></span>
+  <span class="muted">
+    {% if model.active %}🤖 ML score live (trained {{ model.trained_at }},
+      ρ {{ model.val_spearman }}){% else %}📐 V1 rule score
+      {%- if not model.model_file %} (no model yet){% endif %}{% endif %}
+  </span>
+</div>
+
+{% if context and (context.vix is not none or context.implied_gap_pct is not none) %}
+<div class="card" style="display:flex; gap:24px; flex-wrap:wrap;">
+  {% if context.vix is not none %}
+    <span>{{ context.vix_name }}: <strong>{{ '%.2f'|format(context.vix) }}</strong>
+      {% if context.vix_change_pct is not none %}
+        <span class="{{ 'neg' if context.vix_change_pct > 0 else 'pos' }}">
+          ({{ '%+.1f'|format(context.vix_change_pct) }}%)</span>
+      {% endif %}</span>
+  {% endif %}
+  {% if context.implied_gap_pct is not none %}
+    <span>{{ context.gap_source }}:
+      <strong class="{{ 'neg' if context.implied_gap_pct < 0 else 'pos' }}">
+        {{ '%+.2f'|format(context.implied_gap_pct) }}%</strong></span>
+  {% endif %}
+  {% if context.score_multiplier and context.score_multiplier != 1.0 %}
+    <span>⚡ score boost ×{{ context.score_multiplier }}</span>
+  {% endif %}
+  {% for note in context.context_notes or [] %}
+    <span class="muted">{{ note }}</span>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if results %}
+<div class="card" style="padding:0; overflow-x:auto;">
+<table>
+  <thead><tr>
+    <th>#</th><th>Symbol</th><th>Score</th><th>Spot</th><th>Gap %</th>
+    <th>Impl Move %/d</th><th>ATM IV %</th><th>IV Rank</th><th>IV/HV</th>
+    <th>HV5/20</th><th>PCR</th><th>ΔOI %</th><th>Buildup</th>
+    {% if market == 'CRYPTO' %}<th>Funding</th>{% endif %}
+    <th>Regime</th><th style="text-align:left">Flags</th>
+  </tr></thead>
+  <tbody>
+  {% for r in results %}
+    {% macro num(v, d=2, sign=False) -%}
+      {%- if v is none -%}<span class="muted">–</span>
+      {%- else -%}{{ '%+.*f'|format(d, v) if sign else '%.*f'|format(d, v) }}{%- endif -%}
+    {%- endmacro %}
+    <tr>
+      <td>{{ r.rank }}</td>
+      <td><strong>{{ r.symbol }}</strong>{% if r.event_day %} 📅{% endif %}</td>
+      <td class="{{ 'score-hi' if r.score >= 70 else ('score-md' if r.score >= 55) }}"
+          title="v1 {{ r.score_v1 }}{% if r.score_ml is not none %} · ml {{ r.score_ml }}{% endif %} ({{ r.score_source }})">
+        {{ num(r.score, 1) }}</td>
+      <td>{{ num(r.spot) }}</td>
+      <td class="{{ 'neg' if r.gap_pct and r.gap_pct < 0 else ('pos' if r.gap_pct) }}">
+        {{ num(r.gap_pct, 2, True) }}</td>
+      <td>{{ num(r.implied_move) }}</td>
+      <td>{{ num(r.atm_iv, 1) }}</td>
+      <td>{{ num(r.iv_rank, 0) }}</td>
+      <td>{{ num(r.iv_hv_ratio) }}</td>
+      <td>{{ num(r.hv_ratio) }}</td>
+      <td>{{ num(r.pcr) }}</td>
+      <td>{{ num(r.oi_change_pct, 1, True) }}</td>
+      <td class="{{ 'neg' if r.oi_buildup in ('Short Buildup', 'Long Unwinding') else ('pos' if r.oi_buildup) }}">
+        {{ r.oi_buildup or '–' }}</td>
+      {% if market == 'CRYPTO' %}
+        <td>{{ num(r.funding_rate * 100 if r.funding_rate is not none else none, 4) }}%</td>
+      {% endif %}
+      <td class="{{ 'neg' if r.regime == 'Negative Gamma' }}">
+        {{ r.regime or '–' }}</td>
+      <td style="text-align:left">
+        {% for f in r.flags.split(',') if f %}
+          <span class="pill {{ 'crit' if 'GAMMA' in f else ('high' if f in ('GAP_RISK','IMPLIED_MOVE_SPIKE','EVENT_DAY') else 'med') }}">{{ f.replace('_',' ') }}</span>
+        {% endfor %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+const market = "{{ market }}";
+document.getElementById('scanBtn').addEventListener('click', async (e) => {
+  e.target.disabled = true; e.target.textContent = 'Scanning…';
+  await fetch(`/api/scan/${market}/run`, {method: 'POST'});
+  poll();
+});
+async function poll() {
+  const r = await (await fetch(`/api/scan/${market}`)).json();
+  if (r.scanning) { setTimeout(poll, 5000); }
+  else { location.reload(); }
+}
+{% if scanning %}poll();{% endif %}
+</script>
+{% endblock %}

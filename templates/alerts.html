@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin-top:0">Alert History</h2>
+{% if not alerts %}<p class="muted">No alerts yet.</p>{% endif %}
+{% for a in alerts %}
+<div class="card">
+  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <span class="pill {{ 'crit' if a.severity == 'CRITICAL' else ('high' if a.severity == 'HIGH' else 'med') }}">
+      {{ a.severity }}</span>
+    <strong>{{ a.alert_type.replace('_', ' ') }}</strong>
+    <span>{{ {'INDIA':'🇮🇳','CRYPTO':'🪙','US':'🇺🇸'}.get(a.market_type, '') }}
+      {{ a.symbol }}</span>
+    {% if a.score %}<span class="muted">score {{ '%.1f'|format(a.score) }}</span>{% endif %}
+    <span style="flex:1"></span>
+    <span class="muted">{{ a.created_at.strftime('%Y-%m-%d %H:%M UTC') if a.created_at }}</span>
+    <span class="muted">
+      {{ '📨TG' if a.sent_telegram }} {{ '📨DC' if a.sent_discord }}</span>
+  </div>
+  {% if a.message %}<div class="muted" style="margin-top:6px">{{ a.message }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,179 @@
+📋 *PRE-MARKET VOLATILITY SCAN* 🪙 CRYPTO
+_Top 10 by expected-volatility score_
+
+BTC 24h: *+1.60%*
+
+```
+ # SYMBOL       SCORE   GAP%  IMPL% IVR FLAGS
+ 1 ZKPUSDT       64.2  +31.0    n/a   – GAPRISK,FUNDINGEXTREME
+ 2 ARPAUSDT      63.8  +31.0    n/a   – GAPRISK,FUNDINGEXTREME
+ 3 TLMUSDT       63.3  +65.9    n/a   – GAPRISK,OISPIKE,SHORTC
+ 4 MAGMAUSDT     63.1  +41.8    n/a   – GAPRISK,OISPIKE
+ 5 LABUSDT       62.7  -45.7    n/a   – GAPRISK,OISPIKE,SHORTB
+ 6 BIRBUSDT      61.8  -14.3    n/a   – GAPRISK,HOTREALIZEDVOL
+ 7 THEUSDT       60.7   +7.5    n/a   – GAPRISK,HOTREALIZEDVOL
+ 8 SKHYNIXUSDT   57.3  +11.5    n/a   – GAPRISK,OISPIKE,SHORTC
+ 9 RIFUSDT       55.3  +21.4    n/a   – GAPRISK,OISPIKE
+10 VELVETUSDT    52.1   -6.9    n/a   – GAPRISK,SHORTBUILDUP
+```
+
+_Risk guidance: high-score names → expect wide ranges; size down, use wider stops, avoid market orders at the open._
+======================================================================
+📊 *SHORT COVERING* 🪙 `TLMUSDT`
+
+Price up on falling OI — shorts exiting; sharp but potentially short-lived upside bursts.
+
+```
+Spot:         0.00
+Gap:          65.90%
+Implied Move: N/A
+ATM IV:       N/A
+IV Rank:      building history
+IV/HV:        N/A
+HV5/HV20:     1.67
+Regime:       N/A
+OI Buildup:   Short Covering
+Vol Score:    63.3/100 (v1)
+```
+======================================================================
+📊 *FUNDING EXTREME* 🪙 `THEUSDT`
+
+Extreme funding rate — crowded leverage; squeeze risk elevated.
+
+```
+Spot:         0.07
+Gap:          7.52%
+Implied Move: N/A
+ATM IV:       N/A
+IV Rank:      building history
+IV/HV:        N/A
+HV5/HV20:     1.89
+Regime:       N/A
+OI Buildup:   Long Buildup
+Vol Score:    60.7/100 (v1)
+```
+======================================================================
+📋 *PRE-MARKET VOLATILITY SCAN* 🇺🇸 US
+_Top 10 by expected-volatility score_
+
+VIX: *15.81* (-2.1%)
+ES futures: *+0.99%*
+⚡ risk context boost ×1.1 — ES futures implies +0.99% open
+
+```
+ # SYMBOL       SCORE   GAP%  IMPL% IVR FLAGS
+ 1 INTC          90.8   +0.5    4.3   – IMPLIEDMOVESPIKE
+ 2 MSTR          84.7   +1.2    4.3   – IMPLIEDMOVESPIKE
+ 3 AMD           80.3   +0.4    3.3   – IMPLIEDMOVESPIKE
+ 4 ORCL          77.0   +0.5    2.5   – 
+ 5 TSLA          75.0   +0.2    2.0   – 
+ 6 MU            72.7   +0.1    5.1   – IMPLIEDMOVESPIKE
+ 7 COIN          68.5   +0.1    3.4   – IMPLIEDMOVESPIKE
+ 8 PLTR          65.8   +0.4    2.4   – 
+ 9 SMCI          65.8   +0.3    4.1   – IMPLIEDMOVESPIKE
+10 CRM           62.0   +0.1    1.9   – 
+```
+
+_Risk guidance: high-score names → expect wide ranges; size down, use wider stops, avoid market orders at the open._
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `INTC`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         121.01
+Gap:          0.55%
+Implied Move: 4.33%/day
+ATM IV:       86.0%
+IV Rank:      building history
+IV/HV:        0.83
+HV5/HV20:     0.94
+Regime:       Negative Gamma
+OI Buildup:   N/A
+Vol Score:    90.8/100 (v1)
+```
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `MSTR`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         101.96
+Gap:          1.18%
+Implied Move: 4.30%/day
+ATM IV:       85.4%
+IV Rank:      building history
+IV/HV:        0.83
+HV5/HV20:     1.21
+Regime:       Positive Gamma
+OI Buildup:   N/A
+Vol Score:    84.7/100 (v1)
+```
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `AMD`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         519.68
+Gap:          0.36%
+Implied Move: 3.29%/day
+ATM IV:       65.2%
+IV Rank:      building history
+IV/HV:        0.73
+HV5/HV20:     1.05
+Regime:       Negative Gamma
+OI Buildup:   N/A
+Vol Score:    80.3/100 (v1)
+```
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `MU`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         977.00
+Gap:          0.15%
+Implied Move: 5.14%/day
+ATM IV:       101.9%
+IV Rank:      building history
+IV/HV:        0.75
+HV5/HV20:     0.62
+Regime:       Negative Gamma
+OI Buildup:   N/A
+Vol Score:    72.7/100 (v1)
+```
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `COIN`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         165.70
+Gap:          0.13%
+Implied Move: 3.39%/day
+ATM IV:       67.3%
+IV Rank:      building history
+IV/HV:        0.96
+HV5/HV20:     1.01
+Regime:       Positive Gamma
+OI Buildup:   N/A
+Vol Score:    68.5/100 (v1)
+```
+======================================================================
+⚠️ *IMPLIED MOVE SPIKE* 🇺🇸 `SMCI`
+
+Options price an outsized one-day move. Expect wide range; size positions accordingly.
+
+```
+Spot:         27.29
+Gap:          0.26%
+Implied Move: 4.10%/day
+ATM IV:       81.3%
+IV Rank:      building history
+IV/HV:        0.52
+HV5/HV20:     0.49
+Regime:       Negative Gamma
+OI Buildup:   N/A
+Vol Score:    65.8/100 (v1)
+```
